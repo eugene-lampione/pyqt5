@@ -7,7 +7,8 @@ class UI(QMainWindow):
         super(UI, self).__init__()
 
         # load ui file
-        uic.loadUi("dependentcombo.ui",self)
+        uic.loadUi("[uifilename].ui",self)
+        self.setWindowTitle("App Name!")
 
 
         # show the app
