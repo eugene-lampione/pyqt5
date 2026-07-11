@@ -1,8 +1,8 @@
 from PyQt5.QtWidgets import QMainWindow, QApplication, QTextEdit, QPushButton, QComboBox, QMessageBox
 from PyQt5 import uic
 import sys
+import asyncio
 import googletrans
-import textblob
 import pyttsx3
 
 class UI(QMainWindow):
@@ -10,7 +10,6 @@ class UI(QMainWindow):
         super(UI, self).__init__()
 
         # load ui file
-        #uic.loadUi("translate.ui",self)
         uic.loadUi("translate.ui",self)
         self.setWindowTitle("Translator App!")
 
@@ -52,7 +51,7 @@ class UI(QMainWindow):
         self.textedit1.setFocus(True)
         self.textedit2.setText("")
         self.combo1.setCurrentText("english")
-        self.combo2.setCurrentText("german")
+        self.combo2.setCurrentText("spanish")
         
 
     def translate(self):
@@ -70,20 +69,26 @@ class UI(QMainWindow):
             #self.textedit1.setText(from_language_key)
             #self.textedit2.setText(to_language_key)
 
-            # turn original in text blob
-            words = textblob.TextBlob(self.textedit1.toPlainText())
+            text = self.textedit1.toPlainText()
+            if not text.strip():
+                return
 
-            # translate words
-            words = words.translate(from_lang=from_language_key, to=to_language_key)
+            async def do_translate():
+                async with googletrans.Translator() as translator:
+                    return await translator.translate(
+                        text,
+                        src=from_language_key,
+                        dest=to_language_key,
+                    )
 
-            # set translation text box
-            self.textedit2.setText(str(words))
+            translation = asyncio.run(do_translate())
+            self.textedit2.setText(translation.text)
 
             # initial speech engine
             engine = pyttsx3.init()
 
             # pass words to speak
-            engine.say(words)
+            engine.say(translation.text)
 
             # run the engine
             engine.runAndWait()

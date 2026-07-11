@@ -7,8 +7,10 @@ class UI(QMainWindow):
         super(UI, self).__init__()
 
         # load ui file
-        uic.loadUi("[uifilename].ui",self)
+        uic.loadUi("uifilename.ui",self)
         self.setWindowTitle("App Name!")
+
+        # define our widgets
 
 
         # show the app

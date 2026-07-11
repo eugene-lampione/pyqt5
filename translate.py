@@ -3,14 +3,13 @@ from PyQt5 import uic
 import sys
 import asyncio
 import googletrans
-from googletrans import Translator
+
 
 class UI(QMainWindow):
     def __init__(self):
         super(UI, self).__init__()
 
         # load ui file
-        #uic.loadUi("translate.ui",self)
         uic.loadUi("translate.ui",self)
         self.setWindowTitle("Translator App!")
 
@@ -42,7 +41,7 @@ class UI(QMainWindow):
 
         # set default 
         self.combo1.setCurrentText("english")
-        self.combo2.setCurrentText("german")
+        self.combo2.setCurrentText("spanish")
 
         # show the app
         self.show()
@@ -52,23 +51,11 @@ class UI(QMainWindow):
         self.textedit1.setFocus(True)
         self.textedit2.setText("")
         self.combo1.setCurrentText("english")
-        self.combo2.setCurrentText("german")
-        
+        self.combo2.setCurrentText("german")    
 
     def translate(self):
         try:
-
-            """
-            # Get Original Language Key
-			for key,value in self.languages.items():
-				if (value == self.combo_1.currentText()):
-					from_language_key = key
-
-			# Get translated Language Key
-			for key,value in self.languages.items():
-				if (value == self.combo_2.currentText()):
-					to_language_key = key
-            """
+    
             # get original lanaguage key
             for key,value in self.languages.items():
                 if (value == self.combo1.currentText()):
@@ -82,30 +69,20 @@ class UI(QMainWindow):
             #self.textedit1.setText(from_language_key)
             #self.textedit2.setText(to_language_key)
 
-            """
-            # Turn original text into a textblob
-			words = textblob.TextBlob(self.text_1.toPlainText())
-
-			# Translate words!
-			words = words.translate(from_lang=from_language_key, to=to_language_key)
-
-			# Output to text_2
-			self.text_2.setText(str(words))
-            """
-
             text = self.textedit1.toPlainText()
             if not text.strip():
                 return
 
             async def do_translate():
-                async with Translator() as translator:
-                    result = await translator.translate(
-                        text, src=from_language_key, dest=to_language_key
+                async with googletrans.Translator() as translator:
+                    return await translator.translate(
+                        text,
+                        src=from_language_key,
+                        dest=to_language_key,
                     )
-                    return result.text
 
-            translated = asyncio.run(do_translate())
-            self.textedit2.setText(translated)
+            translation = asyncio.run(do_translate())
+            self.textedit2.setText(translation.text)
 
         except Exception as e:
             QMessageBox.about(self,"Translator",str(e))
