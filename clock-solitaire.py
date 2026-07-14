@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QMainWindow, QApplication, QLabel, QPushButton, QStatusBar
+from PyQt5.QtWidgets import QMainWindow, QApplication, QLabel, QPushButton, QStatusBar, QTextBrowser, QListWidget
 from PyQt5 import uic, QtWidgets
 from PyQt5.QtGui import QPixmap, QFont
 from PyQt5.QtCore import QTime, QTimer
@@ -13,7 +13,7 @@ class UI(QMainWindow):
 
         # load ui file
         uic.loadUi("clock-solitaire.ui",self)
-        self.setWindowTitle("Clock Solitaire!")
+        self.setWindowTitle("Patience - Clock Solitaire!")
 
         self.totalSeconds = 0
         self.totalScore = 0
@@ -42,8 +42,6 @@ class UI(QMainWindow):
         self.clock_12 = self.findChild(QLabel, 'clock_12')
         self.clock_13 = self.findChild(QLabel, 'clock_13')
         self.clock_13_down = self.findChild(QLabel, 'clock_13_down')
-        self.gameStatus = self.findChild(QLabel, 'gameStatus')
-        self.shuffleButton = self.findChild(QPushButton,'shuffleButton')
         self.dealButton_1 = self.findChild(QPushButton,'dealButton_1')
         self.dealButton_2 = self.findChild(QPushButton,'dealButton_2')
         self.dealButton_3 = self.findChild(QPushButton,'dealButton_3')
@@ -57,7 +55,12 @@ class UI(QMainWindow):
         self.dealButton_11 = self.findChild(QPushButton,'dealButton_11')
         self.dealButton_12 = self.findChild(QPushButton,'dealButton_12')
         self.dealButton_13 = self.findChild(QPushButton,'dealButton_13')
+        self.shuffleButton = self.findChild(QPushButton,'shuffleButton')
         self.statusbar = self.findChild(QStatusBar, "statusbar")
+        self.legend = self.findChild(QListWidget, "legend")
+        self.viewHideRules = self.findChild(QPushButton, "viewHideRules")
+        self.viewHideRules.setStyleSheet("background-color: gray;")
+        self.rules = self.findChild(QTextBrowser, "rules")
 
         # change status bar font
         self.statusbar.setFont(QFont('Helvetica', 14))
@@ -65,9 +68,7 @@ class UI(QMainWindow):
 
         # disable clock hands card
         self.disableClockButtons()
-
-        # hide game status label
-        self.gameStatus.hide()
+        
 
         # click buttons
         self.shuffleButton.clicked.connect(self.shuffleCards)
@@ -84,10 +85,19 @@ class UI(QMainWindow):
         self.dealButton_11.clicked.connect(self.dealCards_11)
         self.dealButton_12.clicked.connect(self.dealCards_12)
         self.dealButton_13.clicked.connect(self.dealCards_13)
+        self.viewHideRules.clicked.connect(lambda:self.showHideRules(self.viewHideRules))
 
         # show the app
         self.show()
 
+    def showHideRules(self, b):
+        if b.text() == "Show Rules":
+            self.viewHideRules.setText("Hide Rules")
+            self.rules.show()
+        else:
+            self.viewHideRules.setText("Show Rules")
+            self.rules.hide()
+    
     def clocker(self):
         # set seconds
         self.totalSeconds += 1
@@ -101,6 +111,10 @@ class UI(QMainWindow):
         self.statusbar.showMessage(f"Time Elapsed: {self.hours:02d}:{self.minutes:02d}:{self.seconds:02d}")
     
     def shuffleCards(self):
+
+        # hide rules
+        self.viewHideRules.setText("Show Rules")
+        self.rules.hide()
 
         #update games ended
         self.gameEnded = False
@@ -121,9 +135,7 @@ class UI(QMainWindow):
 
         # call the clocker function
         self.clocker()
-
-        # hide game status
-        self.gameStatus.hide()
+        
 
         # "deal" cards
         pixmap = QPixmap(f'images/cards/card_back_red.png')
@@ -663,7 +675,6 @@ class UI(QMainWindow):
             self.gameEnded = True
             self.outcome = "GAME OVER!"
             self.outcomeColor = "red"
-            self.gameStatus.show()
             self.disableClockButtons()
             pixmap = QPixmap(f'images/cards/{self.currentCard}.png')
             self.clock_13.setPixmap(pixmap)
@@ -685,7 +696,6 @@ class UI(QMainWindow):
             self.gameEnded = True
             self.outcome = "YOU WIN!"
             self.outcomeColor = "green"
-            self.gameStatus.show()
             self.disableClockButtons()
             self.timer.stop()
 
@@ -719,6 +729,15 @@ class UI(QMainWindow):
             self.ui.gamesPlayed.setText(f"Games Played: {self.gamesPlayed}")
             self.ui.averageScore.setText(f"Average Score: {self.totalScore/self.gamesPlayed}")
             self.ui.averageCleared.setText(f"Average Cleared: {self.totalCleared/self.gamesPlayed}")
+            self.ui.newGameButton.clicked.connect(self.newGame)
+            self.ui.closeButton.clicked.connect(self.closeResults)
+
+    def closeResults(self):
+        self.results.hide()
+    
+    def newGame(self):
+        self.results.hide()
+        self.shuffleCards()
 
     def disableClockButtons(self, cardnumber = 0):
         self.dealButton_1.setEnabled(False)
