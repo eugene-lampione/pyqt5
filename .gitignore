@@ -1,1 +1,5 @@
 images/*
+build/*
+dist/*
+__pycache__/*
+virt/*

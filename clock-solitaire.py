@@ -4,15 +4,21 @@ from PyQt5.QtGui import QPixmap, QFont
 from PyQt5.QtCore import QTime, QTimer
 from datetime import datetime
 import sys
+import os
 import random
 from csr import Ui_resultsBox
 
+def resource_path(relative_path):
+    base = getattr(sys, "_MEIPASS", os.path.dirname(os.path.abspath(__file__)))
+    return os.path.join(base, relative_path)
+
 class UI(QMainWindow):
+    
     def __init__(self):
         super(UI, self).__init__()
 
         # load ui file
-        uic.loadUi("clock-solitaire.ui",self)
+        uic.loadUi(resource_path("clock-solitaire.ui"),self)
         self.setWindowTitle("Patience - Clock Solitaire!")
 
         self.totalSeconds = 0
@@ -138,7 +144,7 @@ class UI(QMainWindow):
         
 
         # "deal" cards
-        pixmap = QPixmap(f'images/cards/card_back_red.png')
+        pixmap = QPixmap(resource_path(f'images/cards/card_back_red.png'))
         self.clock_1.setPixmap(pixmap)
         self.clock_2.setPixmap(pixmap)
         self.clock_3.setPixmap(pixmap)
@@ -195,7 +201,7 @@ class UI(QMainWindow):
         self.deck.remove(self.card)
 
         # output card to the screen
-        pixmap = QPixmap(f'images/cards/{self.card}.png')
+        pixmap = QPixmap(resource_path(f'images/cards/{self.card}.png'))
         self.clock_13.setPixmap(pixmap)
 
         # update title bar
@@ -227,7 +233,7 @@ class UI(QMainWindow):
         self.deck.remove(self.card)
 
         # output card to the screen
-        pixmap = QPixmap(f'images/cards/{self.card}.png')
+        pixmap = QPixmap(resource_path(f'images/cards/{self.card}.png'))
         self.clock_1.setPixmap(pixmap)
 
         # update title bar
@@ -259,7 +265,7 @@ class UI(QMainWindow):
         self.deck.remove(self.card)
 
         # output card to the screen
-        pixmap = QPixmap(f'images/cards/{self.card}.png')
+        pixmap = QPixmap(resource_path(f'images/cards/{self.card}.png'))
         self.clock_2.setPixmap(pixmap)
 
         # update title bar
@@ -291,7 +297,7 @@ class UI(QMainWindow):
         self.deck.remove(self.card)
 
         # output card to the screen
-        pixmap = QPixmap(f'images/cards/{self.card}.png')
+        pixmap = QPixmap(resource_path(f'images/cards/{self.card}.png'))
         self.clock_3.setPixmap(pixmap)
 
         # update title bar
@@ -323,7 +329,7 @@ class UI(QMainWindow):
         self.deck.remove(self.card)
 
         # output card to the screen
-        pixmap = QPixmap(f'images/cards/{self.card}.png')
+        pixmap = QPixmap(resource_path(f'images/cards/{self.card}.png'))
         self.clock_4.setPixmap(pixmap)
 
         # update title bar
@@ -355,7 +361,7 @@ class UI(QMainWindow):
         self.deck.remove(self.card)
 
         # output card to the screen
-        pixmap = QPixmap(f'images/cards/{self.card}.png')
+        pixmap = QPixmap(resource_path(f'images/cards/{self.card}.png'))
         self.clock_5.setPixmap(pixmap)
 
         # update title bar
@@ -387,7 +393,7 @@ class UI(QMainWindow):
         self.deck.remove(self.card)
 
         # output card to the screen
-        pixmap = QPixmap(f'images/cards/{self.card}.png')
+        pixmap = QPixmap(resource_path(f'images/cards/{self.card}.png'))
         self.clock_6.setPixmap(pixmap)
 
         # update title bar
@@ -419,7 +425,7 @@ class UI(QMainWindow):
         self.deck.remove(self.card)
 
         # output card to the screen
-        pixmap = QPixmap(f'images/cards/{self.card}.png')
+        pixmap = QPixmap(resource_path(f'images/cards/{self.card}.png'))
         self.clock_7.setPixmap(pixmap)
 
         # update title bar
@@ -451,7 +457,7 @@ class UI(QMainWindow):
         self.deck.remove(self.card)
 
         # output card to the screen
-        pixmap = QPixmap(f'images/cards/{self.card}.png')
+        pixmap = QPixmap(resource_path(f'images/cards/{self.card}.png'))
         self.clock_8.setPixmap(pixmap)
 
         # update title bar
@@ -483,7 +489,7 @@ class UI(QMainWindow):
         self.deck.remove(self.card)
 
         # output card to the screen
-        pixmap = QPixmap(f'images/cards/{self.card}.png')
+        pixmap = QPixmap(resource_path(f'images/cards/{self.card}.png'))
         self.clock_9.setPixmap(pixmap)
 
         # update title bar
@@ -515,7 +521,7 @@ class UI(QMainWindow):
         self.deck.remove(self.card)
 
         # output card to the screen
-        pixmap = QPixmap(f'images/cards/{self.card}.png')
+        pixmap = QPixmap(resource_path(f'images/cards/{self.card}.png'))
         self.clock_10.setPixmap(pixmap)
 
         # update title bar
@@ -547,7 +553,7 @@ class UI(QMainWindow):
         self.deck.remove(self.card)
 
         # output card to the screen
-        pixmap = QPixmap(f'images/cards/{self.card}.png')
+        pixmap = QPixmap(resource_path(f'images/cards/{self.card}.png'))
         self.clock_11.setPixmap(pixmap)
 
         # update title bar
@@ -579,7 +585,7 @@ class UI(QMainWindow):
         self.deck.remove(self.card)
 
         # output card to the screen
-        pixmap = QPixmap(f'images/cards/{self.card}.png')
+        pixmap = QPixmap(resource_path(f'images/cards/{self.card}.png'))
         self.clock_12.setPixmap(pixmap)
 
         # update title bar
@@ -597,7 +603,7 @@ class UI(QMainWindow):
         # update
         self.clockHandsLeft["clock_13_down"] -= 1
         if self.clockHandsLeft["clock_13_down"] == 0:
-            pixmap = QPixmap(f'images/cards/green.png')
+            pixmap = QPixmap(resource_path(f'images/cards/green.png'))
             self.clock_13_down.setPixmap(pixmap)
             self.dealButton_13.setText("X")
             self.dealButton_13.setStyleSheet("font: bold;font-size: 36px")
@@ -616,7 +622,7 @@ class UI(QMainWindow):
         self.deck.remove(self.card)
 
         # output card to the screen
-        pixmap = QPixmap(f'images/cards/{self.card}.png')
+        pixmap = QPixmap(resource_path(f'images/cards/{self.card}.png'))
         self.clock_13.setPixmap(pixmap)
 
         # update title bar
@@ -630,16 +636,16 @@ class UI(QMainWindow):
         
         if self.turn == 1:
             # output card to the screen
-            pixmap = QPixmap(f'images/cards/green.png')
+            pixmap = QPixmap(resource_path(f'images/cards/green.png'))
             self.clock_13.setPixmap(pixmap)
         else:
             # output card to the screen
             variable_name = f"clock_{self.previousCardNumber}_down"
             
             if self.clockHandsLeft[variable_name] == 0 or self.previousCardNumber == 13:
-                pixmap = QPixmap(f'images/cards/{self.previousCard}.png')
+                pixmap = QPixmap(resource_path(f'images/cards/{self.previousCard}.png'))
             else:
-                pixmap = QPixmap(f'images/cards/card_back_red.png')
+                pixmap = QPixmap(resource_path(f'images/cards/card_back_red.png'))
 
             if self.previousCardNumber == 1:
                 self.clock_1.setPixmap(pixmap)
@@ -676,7 +682,7 @@ class UI(QMainWindow):
             self.outcome = "GAME OVER!"
             self.outcomeColor = "red"
             self.disableClockButtons()
-            pixmap = QPixmap(f'images/cards/{self.currentCard}.png')
+            pixmap = QPixmap(resource_path(f'images/cards/{self.currentCard}.png'))
             self.clock_13.setPixmap(pixmap)
             self.revertPreviousClockPile()
             self.timer.stop()
